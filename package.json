@@ -1,7 +1,7 @@
 {
-  "name": "unc-react-component-base",
+  "name": "unc-react-page-transitions",
   "version": "1.0.0",
-  "description": "React Component Base",
+  "description": "React Page Transition Component based in codrops's project and developing by Unico Digital",
   "main": "dist/index.js",
   "scripts": {
     "wp": "webpack",

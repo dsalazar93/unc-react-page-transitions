@@ -4,9 +4,21 @@ import React from 'react';
 
 import { render } from 'react-dom';
 
-import MyComponent from '../src';
+import { PageTransitions, Page } from '../src';
 
 render(
-  <MyComponent />,
+  <PageTransitions>
+    <Page style={{ backgroundColor: '#f68dbb' }}>
+      <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
+    </Page>
+
+    <Page style={{ backgroundColor: '#0ac2d2' }}>
+      <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
+    </Page>
+
+    <Page style={{ backgroundColor: '#7bb7fa' }}>
+      <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
+    </Page>
+  </PageTransitions>,
   document.getElementById('app')
 );

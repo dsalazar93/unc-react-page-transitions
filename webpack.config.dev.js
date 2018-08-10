@@ -4,7 +4,7 @@ module.exports = {
   entry: './example/index.js',
   output: {
     path: path.resolve(__dirname, 'example/dist'),
-    filename: 'unc-react-component-base.js'
+    filename: 'unc-react-page-transitions.js'
   },
   module: {
     rules: [
