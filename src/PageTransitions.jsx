@@ -12,10 +12,6 @@ const styles = {
     perspective: '1200px',
     position: 'relative',
     width: '100%'
-  },
-  button: {
-    position: 'absolute',
-    zIndex: 10
   }
 };
 
@@ -125,8 +121,6 @@ class PageTransitions extends React.Component {
 
     return (
       <div className="ptr-perspective" style={styles.perspective}>
-        <button onClick={this.nextPage} style={styles.button}>Next</button>
-
         {children.map((child, idx) => {
           const cloneElement = React.cloneElement(child, {
             key: idx,

@@ -37,10 +37,6 @@ var styles = {
     perspective: '1200px',
     position: 'relative',
     width: '100%'
-  },
-  button: {
-    position: 'absolute',
-    zIndex: 10
   }
 };
 var animations = {
@@ -161,10 +157,7 @@ function (_React$Component) {
       return _react.default.createElement("div", {
         className: "ptr-perspective",
         style: styles.perspective
-      }, _react.default.createElement("button", {
-        onClick: this.nextPage,
-        style: styles.button
-      }, "Next"), children.map(function (child, idx) {
+      }, children.map(function (child, idx) {
         var cloneElement = _react.default.cloneElement(child, {
           key: idx,
           animcursor: _this2.animcursor,

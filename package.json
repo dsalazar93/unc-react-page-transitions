@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "wp": "webpack",
-    "wp-dev": "webpack --config ./webpack.config.dev.js",
+    "wp-dev": "webpack -w --config ./webpack.config.dev.js",
     "test": "ava",
     "build": "babel src --out-dir dist"
   },
