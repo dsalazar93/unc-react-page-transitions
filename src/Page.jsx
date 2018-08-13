@@ -39,6 +39,8 @@ class Page extends React.Component {
   constructor(props) {
     super(props);
 
+    this.page = React.createRef();
+
     this.isCurrentPage = props.isCurrentPage;
     this.isPrevPage = props.isPrevPage;
 
@@ -78,42 +80,42 @@ class Page extends React.Component {
    * according to the case.
    */
   componentDidMount() {
-    const tthis = this;
+    const _this = this;
 
-    this.refs.page.addEventListener(animEndEventNames[Modernizr.prefixed('animation')], () => {
-      tthis.props.onAnimationEnd(tthis.isCurrentPage, tthis.isPrevPage);
+    this.page.current.addEventListener(animEndEventNames[Modernizr.prefixed('animation')], () => {
+      _this.props.onAnimationEnd(_this.isCurrentPage, _this.isPrevPage);
 
-      if (tthis.isCurrentPage) {
-        if (tthis.loadedPageTriggers) {
-          tthis.loadedPageTriggers.forEach((trigger) => {
-            trigger.f(tthis);
+      if (_this.isCurrentPage) {
+        if (_this.loadedPageTriggers) {
+          _this.loadedPageTriggers.forEach((trigger) => {
+            trigger.f(_this);
           });
-        } else if (tthis.props.loadedPageTriggers) {
-          tthis.loadedPageTriggers = [];
+        } else if (_this.props.loadedPageTriggers) {
+          _this.loadedPageTriggers = [];
 
-          tthis.props.loadedPageTriggers.forEach((trigger) => {
-            trigger.f(tthis);
+          _this.props.loadedPageTriggers.forEach((trigger) => {
+            trigger.f(_this);
 
             if (trigger.r) {
-              tthis.loadedPageTriggers.push(trigger);
+              _this.loadedPageTriggers.push(trigger);
             }
           });
         }
       }
 
-      if (tthis.isPrevPage) {
-        if (tthis.leavedPageTriggers) {
-          tthis.leavedPageTriggers.forEach((trigger) => {
-            trigger.f(tthis);
+      if (_this.isPrevPage) {
+        if (_this.leavedPageTriggers) {
+          _this.leavedPageTriggers.forEach((trigger) => {
+            trigger.f(_this);
           });
-        } else if (tthis.props.leavedPageTriggers) {
-          tthis.leavedPageTriggers = [];
+        } else if (_this.props.leavedPageTriggers) {
+          _this.leavedPageTriggers = [];
 
-          tthis.props.leavedPageTriggers.forEach((trigger) => {
-            trigger.f(tthis);
+          _this.props.leavedPageTriggers.forEach((trigger) => {
+            trigger.f(_this);
 
             if (trigger.r) {
-              tthis.leavedPageTriggers.push(trigger);
+              _this.leavedPageTriggers.push(trigger);
             }
           });
         }
@@ -149,7 +151,7 @@ class Page extends React.Component {
     }
 
     return (
-      <div ref="page" className={className} style={style}>
+      <div ref={this.page} className={className} style={style}>
         { this.props.children }
       </div>
     );

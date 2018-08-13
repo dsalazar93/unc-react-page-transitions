@@ -137,6 +137,7 @@ function (_React$Component) {
     key: "nextPage",
     value: function nextPage() {
       if (this.state.isAnimating) return false;
+      this.animcursorCheck();
       this.setState({
         isAnimating: true,
         prevPage: this.state.currentPage,

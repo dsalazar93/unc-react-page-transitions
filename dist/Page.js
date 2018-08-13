@@ -66,19 +66,20 @@ function (_React$Component) {
   _inherits(Page, _React$Component);
 
   function Page(props) {
-    var _this;
+    var _this2;
 
     _classCallCheck(this, Page);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Page).call(this, props));
-    _this.isCurrentPage = props.isCurrentPage;
-    _this.isPrevPage = props.isPrevPage;
-    _this.loadedPageTriggers = undefined;
-    _this.leavedPageTriggers = undefined;
-    _this.setTimeouts = [];
-    _this.addSetTimeout = _this.addSetTimeout.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.clearSetTimeouts = _this.clearSetTimeouts.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Page).call(this, props));
+    _this2.page = _react.default.createRef();
+    _this2.isCurrentPage = props.isCurrentPage;
+    _this2.isPrevPage = props.isPrevPage;
+    _this2.loadedPageTriggers = undefined;
+    _this2.leavedPageTriggers = undefined;
+    _this2.setTimeouts = [];
+    _this2.addSetTimeout = _this2.addSetTimeout.bind(_assertThisInitialized(_assertThisInitialized(_this2)));
+    _this2.clearSetTimeouts = _this2.clearSetTimeouts.bind(_assertThisInitialized(_assertThisInitialized(_this2)));
+    return _this2;
   }
   /**
    * Allows to add a function into the array of settimeout functions
@@ -116,39 +117,42 @@ function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var tthis = this;
-      this.refs.page.addEventListener(animEndEventNames[_modernizr.default.prefixed('animation')], function () {
-        tthis.props.onAnimationEnd(tthis.isCurrentPage, tthis.isPrevPage);
+      var _this = this;
 
-        if (tthis.isCurrentPage) {
-          if (tthis.loadedPageTriggers) {
-            tthis.loadedPageTriggers.forEach(function (trigger) {
-              trigger.f(tthis);
+      this.page.current.addEventListener(animEndEventNames[_modernizr.default.prefixed('animation')], function () {
+        _this.props.onAnimationEnd(_this.isCurrentPage, _this.isPrevPage);
+
+        if (_this.isCurrentPage) {
+          if (_this.loadedPageTriggers) {
+            _this.loadedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this);
             });
-          } else if (tthis.props.loadedPageTriggers) {
-            tthis.loadedPageTriggers = [];
-            tthis.props.loadedPageTriggers.forEach(function (trigger) {
-              trigger.f(tthis);
+          } else if (_this.props.loadedPageTriggers) {
+            _this.loadedPageTriggers = [];
+
+            _this.props.loadedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this);
 
               if (trigger.r) {
-                tthis.loadedPageTriggers.push(trigger);
+                _this.loadedPageTriggers.push(trigger);
               }
             });
           }
         }
 
-        if (tthis.isPrevPage) {
-          if (tthis.leavedPageTriggers) {
-            tthis.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(tthis);
+        if (_this.isPrevPage) {
+          if (_this.leavedPageTriggers) {
+            _this.leavedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this);
             });
-          } else if (tthis.props.leavedPageTriggers) {
-            tthis.leavedPageTriggers = [];
-            tthis.props.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(tthis);
+          } else if (_this.props.leavedPageTriggers) {
+            _this.leavedPageTriggers = [];
+
+            _this.props.leavedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this);
 
               if (trigger.r) {
-                tthis.leavedPageTriggers.push(trigger);
+                _this.leavedPageTriggers.push(trigger);
               }
             });
           }
@@ -188,7 +192,7 @@ function (_React$Component) {
       }
 
       return _react.default.createElement("div", {
-        ref: "page",
+        ref: this.page,
         className: className,
         style: style
       }, this.props.children);

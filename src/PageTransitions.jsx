@@ -102,6 +102,8 @@ class PageTransitions extends React.Component {
   nextPage() {
     if (this.state.isAnimating) return false;
 
+    this.animcursorCheck();
+
     this.setState({
       isAnimating: true,
       prevPage: this.state.currentPage,
