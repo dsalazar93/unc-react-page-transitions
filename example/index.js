@@ -4,7 +4,7 @@ import React from 'react';
 
 import { render } from 'react-dom';
 
-import { PageTransitions, Page } from '../src';
+import { PageTransitions, Page } from '../dist';
 
 class App extends React.Component {
   render() {

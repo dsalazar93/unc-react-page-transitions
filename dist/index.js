@@ -16,8 +16,8 @@ Object.defineProperty(exports, "Page", {
   }
 });
 
-var _PageTransitions = _interopRequireDefault(require("./PageTransitions.jsx"));
+var _PageTransitions = _interopRequireDefault(require("./PageTransitions"));
 
-var _Page = _interopRequireDefault(require("./Page.jsx"));
+var _Page = _interopRequireDefault(require("./Page"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

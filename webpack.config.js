@@ -5,7 +5,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'unc-react-page-transitions.js',
-    library: 'uncReactPageTransitions',
+    library: 'unc-react-page-transitions',
     libraryTarget: 'umd',
     publicPath: '/dist/',
     umdNamedDefine: true
@@ -33,7 +33,8 @@ module.exports = {
       modernizr$: path.resolve(__dirname, ".modernizrrc.js"),
       'react': path.resolve(__dirname, "./node_modules/react"),
       'react-dom': path.resolve(__dirname, "./node_modules/react-dom")
-    }
+    },
+    extensions: ['.js', '.jsx']
   },
   externals: {
     "react": {
