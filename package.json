@@ -1,6 +1,6 @@
 {
   "name": "unc-react-page-transitions",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Page Transition Component based in codrops's project and developing by Unico Digital",
   "main": "dist/index.js",
   "scripts": {
@@ -46,5 +46,21 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "prop-types": "^15.6.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jpbaena13/unc-react-page-transitions.git"
+  },
+  "keywords": [
+    "react",
+    "js",
+    "javascript",
+    "jpbaena13",
+    "react-component",
+    "page transitions"
+  ],
+  "bugs": {
+    "url": "https://github.com/jpbaena13/unc-react-page-transitions/issues"
+  },
+  "homepage": "https://github.com/jpbaena13/unc-react-page-transitions.git"
 }
