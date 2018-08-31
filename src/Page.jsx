@@ -151,7 +151,7 @@ class Page extends React.Component {
     }
 
     return (
-      <div ref={this.page} className={className} style={style}>
+      <div id={this.props.id} ref={this.page} className={className} style={style}>
         { this.props.children }
       </div>
     );
