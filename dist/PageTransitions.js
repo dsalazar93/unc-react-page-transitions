@@ -131,19 +131,46 @@ function (_React$Component) {
     }
     /**
      * Fires the transition of pages.
+     * @param  {Object} opts This object contains 2 params:
+     *                       (animation) => cursor for animation according animations.js file.
+     *                       (page) => index of the next page to show
+     *
+     * @return {string}      Id of the next page.
      */
 
   }, {
     key: "nextPage",
     value: function nextPage() {
-      if (this.state.isAnimating) return false;
-      this.animcursorCheck();
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var opts = {};
+
+      if (typeof options === 'number') {
+        opts.page = options;
+      } else if (typeof options === 'string') {
+        opts.page = parseInt(options.split('-')[2], 10);
+      } else if (_typeof(options) === 'object' && typeof options.page === 'string') {
+        opts.page = parseInt(options.page.split('-')[2], 10);
+      }
+
+      if (this.state.isAnimating || opts.page === this.state.currentPage) {
+        return "".concat(this.props.idPrefix, "-").concat(this.state.currentPage);
+      }
+
+      if (opts.animation) {
+        this.animcursor = opts.animation;
+      } else if (this.props.defaultAnimation) {
+        this.animcursor = this.props.defaultAnimation;
+      } else {
+        this.animcursorCheck();
+      }
+
+      var nextPage = opts.page || (this.state.currentPage + 1 < this.props.children.length ? this.state.currentPage + 1 : 0);
       this.setState({
         isAnimating: true,
         prevPage: this.state.currentPage,
-        currentPage: this.state.currentPage + 1 < this.props.children.length ? this.state.currentPage + 1 : 0
+        currentPage: nextPage
       });
-      return true;
+      return "".concat(this.props.idPrefix, "-").concat(nextPage);
     }
     /**
      * Render function
@@ -160,7 +187,8 @@ function (_React$Component) {
         style: styles.perspective
       }, children.map(function (child, idx) {
         var cloneElement = _react.default.cloneElement(child, {
-          key: idx,
+          key: "".concat(_this2.props.idPrefix, "-").concat(idx),
+          id: "".concat(_this2.props.idPrefix, "-").concat(idx),
           animcursor: _this2.animcursor,
           isCurrentPage: idx === _this2.state.currentPage,
           isPrevPage: _this2.state.isAnimating && idx === _this2.state.prevPage,
@@ -176,5 +204,8 @@ function (_React$Component) {
   return PageTransitions;
 }(_react.default.Component);
 
+PageTransitions.defaultProps = {
+  idPrefix: 'pt-page'
+};
 var _default = PageTransitions;
 exports.default = _default;

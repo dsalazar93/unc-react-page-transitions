@@ -192,6 +192,7 @@ function (_React$Component) {
       }
 
       return _react.default.createElement("div", {
+        id: this.props.id,
         ref: this.page,
         className: className,
         style: style
