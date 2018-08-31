@@ -15,6 +15,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -143,6 +145,7 @@ function (_React$Component) {
     value: function nextPage() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var opts = {};
+      opts.animation = options.animation;
 
       if (typeof options === 'number') {
         opts.page = options;
@@ -150,6 +153,8 @@ function (_React$Component) {
         opts.page = parseInt(options.split('-')[2], 10);
       } else if (_typeof(options) === 'object' && typeof options.page === 'string') {
         opts.page = parseInt(options.page.split('-')[2], 10);
+      } else {
+        opts = (_readOnlyError("opts"), options);
       }
 
       if (this.state.isAnimating || opts.page === this.state.currentPage) {

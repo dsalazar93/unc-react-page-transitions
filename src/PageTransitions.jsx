@@ -107,12 +107,16 @@ class PageTransitions extends React.Component {
   nextPage(options = {}) {
     const opts = {};
 
+    opts.animation = options.animation;
+
     if (typeof options === 'number') {
       opts.page = options;
     } else if (typeof options === 'string') {
       opts.page = parseInt(options.split('-')[2], 10);
     } else if (typeof options === 'object' && typeof options.page === 'string') {
       opts.page = parseInt(options.page.split('-')[2], 10);
+    } else {
+      opts = options;
     }
 
     if (this.state.isAnimating || opts.page === this.state.currentPage) {
