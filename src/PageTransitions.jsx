@@ -98,20 +98,45 @@ class PageTransitions extends React.Component {
 
   /**
    * Fires the transition of pages.
+   * @param  {Object} opts This object contains 2 params:
+   *                       (animation) => cursor for animation according animations.js file.
+   *                       (page) => index of the next page to show
+   *
+   * @return {string}      Id of the next page.
    */
-  nextPage() {
-    if (this.state.isAnimating) return false;
+  nextPage(options = {}) {
+    const opts = {};
 
-    this.animcursorCheck();
+    if (typeof options === 'number') {
+      opts.page = options;
+    } else if (typeof options === 'string') {
+      opts.page = parseInt(options.split('-')[2], 10);
+    } else if (typeof options === 'object' && typeof options.page === 'string') {
+      opts.page = parseInt(options.page.split('-')[2], 10);
+    }
+
+    if (this.state.isAnimating || opts.page === this.state.currentPage) {
+      return `${this.props.idPrefix}-${this.state.currentPage}`;
+    }
+
+    if (opts.animation) {
+      this.animcursor = opts.animation;
+    } else if (this.props.defaultAnimation) {
+      this.animcursor = this.props.defaultAnimation;
+    } else {
+      this.animcursorCheck();
+    }
+
+    const nextPage = opts.page || (((this.state.currentPage + 1)
+        < this.props.children.length) ? (this.state.currentPage + 1) : 0);
 
     this.setState({
       isAnimating: true,
       prevPage: this.state.currentPage,
-      currentPage: ((this.state.currentPage + 1)
-        < this.props.children.length) ? (this.state.currentPage + 1) : 0
+      currentPage: nextPage
     });
 
-    return true;
+    return `${this.props.idPrefix}-${nextPage}`;
   }
 
   /**
@@ -125,7 +150,8 @@ class PageTransitions extends React.Component {
       <div className="ptr-perspective" style={styles.perspective}>
         {children.map((child, idx) => {
           const cloneElement = React.cloneElement(child, {
-            key: idx,
+            key: `${this.props.idPrefix}-${idx}`,
+            id: `${this.props.idPrefix}-${idx}`,
             animcursor: this.animcursor,
             isCurrentPage: (idx === this.state.currentPage),
             isPrevPage: (this.state.isAnimating && (idx === this.state.prevPage)),
@@ -139,5 +165,9 @@ class PageTransitions extends React.Component {
     );
   }
 }
+
+PageTransitions.defaultProps = {
+  idPrefix: 'pt-page'
+};
 
 export default PageTransitions;
