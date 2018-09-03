@@ -19,12 +19,12 @@ const animations = {
   max: 67
 };
 
-class PageTransitions extends React.Component {
+class PageTransitions extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      currentPage: 0,
+      currentPage: this.props.currentPage || 0,
       prevPage: undefined,
       isAnimating: false
     };
@@ -105,7 +105,7 @@ class PageTransitions extends React.Component {
    * @return {string}      Id of the next page.
    */
   nextPage(options = {}) {
-    const opts = {};
+    let opts = {};
 
     opts.animation = options.animation;
 
@@ -125,8 +125,8 @@ class PageTransitions extends React.Component {
 
     if (opts.animation) {
       this.animcursor = opts.animation;
-    } else if (this.props.defaultAnimation) {
-      this.animcursor = this.props.defaultAnimation;
+    } else if (this.props.defaultNextPageAnimation) {
+      this.animcursor = this.props.defaultNextPageAnimation;
     } else {
       this.animcursorCheck();
     }
@@ -136,15 +136,38 @@ class PageTransitions extends React.Component {
 
     this.setState({
       isAnimating: true,
-      prevPage: this.state.currentPage,
-      currentPage: nextPage
+      currentPage: nextPage,
+      prevPage: this.state.currentPage
     });
 
     return `${this.props.idPrefix}-${nextPage}`;
   }
 
   /**
-   * Render function
+   * Fires a transition to the previous page.
+   * 
+   * @return {string}      Id of the previous page.
+   */
+  backPage(animation) {
+    if (this.state.isAnimating) {
+      return `${this.props.idPrefix}-${this.state.currentPage}`;
+    }
+
+    this.animcursor = animation || this.props.defaultBackPageAnimation || 0;
+
+    const nextPage = (this.state.currentPage - 1 >= 0) ? (this.state.currentPage - 1) : this.props.children.length - 1;
+
+    this.setState({
+      isAnimating: true,
+      currentPage: nextPage,
+      prevPage: this.state.currentPage
+    });
+
+    return `${this.props.idPrefix}-${nextPage}`;
+  }
+
+  /**
+   * Render method.
    */
   render() {
     const children = Array.isArray(this.props.children)
@@ -153,17 +176,19 @@ class PageTransitions extends React.Component {
     return (
       <div className="ptr-perspective" style={styles.perspective}>
         {children.map((child, idx) => {
-          const cloneElement = React.cloneElement(child, {
+          const props = {
             key: `${this.props.idPrefix}-${idx}`,
             id: `${this.props.idPrefix}-${idx}`,
-            animcursor: this.animcursor,
             isCurrentPage: (idx === this.state.currentPage),
-            isPrevPage: (this.state.isAnimating && (idx === this.state.prevPage)),
-            isAnimating: this.state.isAnimating,
+            isPrevPage: (this.state.isAnimating && idx === this.state.prevPage),
             onAnimationEnd: this.onAnimationEnd
-          });
+          }
+          
+          if (idx === this.state.currentPage || (this.state.isAnimating && idx === this.state.prevPage)) {
+            props.animcursor = this.animcursor;
+          }
 
-          return cloneElement;
+          return React.cloneElement(child, props);
         })}
       </div>
     );

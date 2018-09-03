@@ -15,8 +15,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -47,8 +45,8 @@ var animations = {
 
 var PageTransitions =
 /*#__PURE__*/
-function (_React$Component) {
-  _inherits(PageTransitions, _React$Component);
+function (_React$PureComponent) {
+  _inherits(PageTransitions, _React$PureComponent);
 
   function PageTransitions(props) {
     var _this;
@@ -57,7 +55,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PageTransitions).call(this, props));
     _this.state = {
-      currentPage: 0,
+      currentPage: _this.props.currentPage || 0,
       prevPage: undefined,
       isAnimating: false
     }; // Without state
@@ -154,7 +152,7 @@ function (_React$Component) {
       } else if (_typeof(options) === 'object' && typeof options.page === 'string') {
         opts.page = parseInt(options.page.split('-')[2], 10);
       } else {
-        opts = (_readOnlyError("opts"), options);
+        opts = options;
       }
 
       if (this.state.isAnimating || opts.page === this.state.currentPage) {
@@ -163,8 +161,8 @@ function (_React$Component) {
 
       if (opts.animation) {
         this.animcursor = opts.animation;
-      } else if (this.props.defaultAnimation) {
-        this.animcursor = this.props.defaultAnimation;
+      } else if (this.props.defaultNextPageAnimation) {
+        this.animcursor = this.props.defaultNextPageAnimation;
       } else {
         this.animcursorCheck();
       }
@@ -172,13 +170,35 @@ function (_React$Component) {
       var nextPage = opts.page || (this.state.currentPage + 1 < this.props.children.length ? this.state.currentPage + 1 : 0);
       this.setState({
         isAnimating: true,
-        prevPage: this.state.currentPage,
-        currentPage: nextPage
+        currentPage: nextPage,
+        prevPage: this.state.currentPage
       });
       return "".concat(this.props.idPrefix, "-").concat(nextPage);
     }
     /**
-     * Render function
+     * Fires a transition to the previous page.
+     * 
+     * @return {string}      Id of the previous page.
+     */
+
+  }, {
+    key: "backPage",
+    value: function backPage(animation) {
+      if (this.state.isAnimating) {
+        return "".concat(this.props.idPrefix, "-").concat(this.state.currentPage);
+      }
+
+      this.animcursor = animation || this.props.defaultBackPageAnimation || 0;
+      var nextPage = this.state.currentPage - 1 >= 0 ? this.state.currentPage - 1 : this.props.children.length - 1;
+      this.setState({
+        isAnimating: true,
+        currentPage: nextPage,
+        prevPage: this.state.currentPage
+      });
+      return "".concat(this.props.idPrefix, "-").concat(nextPage);
+    }
+    /**
+     * Render method.
      */
 
   }, {
@@ -191,23 +211,25 @@ function (_React$Component) {
         className: "ptr-perspective",
         style: styles.perspective
       }, children.map(function (child, idx) {
-        var cloneElement = _react.default.cloneElement(child, {
+        var props = {
           key: "".concat(_this2.props.idPrefix, "-").concat(idx),
           id: "".concat(_this2.props.idPrefix, "-").concat(idx),
-          animcursor: _this2.animcursor,
           isCurrentPage: idx === _this2.state.currentPage,
           isPrevPage: _this2.state.isAnimating && idx === _this2.state.prevPage,
-          isAnimating: _this2.state.isAnimating,
           onAnimationEnd: _this2.onAnimationEnd
-        });
+        };
 
-        return cloneElement;
+        if (idx === _this2.state.currentPage || _this2.state.isAnimating && idx === _this2.state.prevPage) {
+          props.animcursor = _this2.animcursor;
+        }
+
+        return _react.default.cloneElement(child, props);
       }));
     }
   }]);
 
   return PageTransitions;
-}(_react.default.Component);
+}(_react.default.PureComponent);
 
 PageTransitions.defaultProps = {
   idPrefix: 'pt-page'

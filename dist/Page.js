@@ -66,20 +66,19 @@ function (_React$Component) {
   _inherits(Page, _React$Component);
 
   function Page(props) {
-    var _this2;
+    var _this;
 
     _classCallCheck(this, Page);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Page).call(this, props));
-    _this2.page = _react.default.createRef();
-    _this2.isCurrentPage = props.isCurrentPage;
-    _this2.isPrevPage = props.isPrevPage;
-    _this2.loadedPageTriggers = undefined;
-    _this2.leavedPageTriggers = undefined;
-    _this2.setTimeouts = [];
-    _this2.addSetTimeout = _this2.addSetTimeout.bind(_assertThisInitialized(_assertThisInitialized(_this2)));
-    _this2.clearSetTimeouts = _this2.clearSetTimeouts.bind(_assertThisInitialized(_assertThisInitialized(_this2)));
-    return _this2;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Page).call(this, props));
+    _this.page = _react.default.createRef(); // Repeaters
+
+    _this.loadedPageTriggers = undefined;
+    _this.leavedPageTriggers = undefined;
+    _this.setTimeouts = [];
+    _this.addSetTimeout = _this.addSetTimeout.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.clearSetTimeouts = _this.clearSetTimeouts.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
   }
   /**
    * Allows to add a function into the array of settimeout functions
@@ -117,42 +116,44 @@ function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this = this;
+      var _this2 = this;
 
-      this.page.current.addEventListener(animEndEventNames[_modernizr.default.prefixed('animation')], function () {
-        _this.props.onAnimationEnd(_this.isCurrentPage, _this.isPrevPage);
+      this.page.current.addEventListener(animEndEventNames[_modernizr.default.prefixed('animation')], function (event) {
+        if (event.target !== _this2.page.current) return;
 
-        if (_this.isCurrentPage) {
-          if (_this.loadedPageTriggers) {
-            _this.loadedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this);
+        _this2.props.onAnimationEnd(_this2.props.isCurrentPage, _this2.props.isPrevPage);
+
+        if (_this2.props.isCurrentPage) {
+          if (_this2.loadedPageTriggers) {
+            _this2.loadedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this2);
             });
-          } else if (_this.props.loadedPageTriggers) {
-            _this.loadedPageTriggers = [];
+          } else if (_this2.props.loadedPageTriggers) {
+            _this2.loadedPageTriggers = [];
 
-            _this.props.loadedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this);
+            _this2.props.loadedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this2);
 
               if (trigger.r) {
-                _this.loadedPageTriggers.push(trigger);
+                _this2.loadedPageTriggers.push(trigger);
               }
             });
           }
         }
 
-        if (_this.isPrevPage) {
-          if (_this.leavedPageTriggers) {
-            _this.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this);
+        if (_this2.props.isPrevPage) {
+          if (_this2.leavedPageTriggers) {
+            _this2.leavedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this2);
             });
-          } else if (_this.props.leavedPageTriggers) {
-            _this.leavedPageTriggers = [];
+          } else if (_this2.props.leavedPageTriggers) {
+            _this2.leavedPageTriggers = [];
 
-            _this.props.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this);
+            _this2.props.leavedPageTriggers.forEach(function (trigger) {
+              trigger.f(_this2);
 
               if (trigger.r) {
-                _this.leavedPageTriggers.push(trigger);
+                _this2.leavedPageTriggers.push(trigger);
               }
             });
           }
@@ -160,17 +161,7 @@ function (_React$Component) {
       });
     }
     /**
-     * componentWillReceiveProps method
-     */
-
-  }, {
-    key: "componentWillReceiveProps",
-    value: function componentWillReceiveProps(nextProps) {
-      this.isCurrentPage = nextProps.isCurrentPage;
-      this.isPrevPage = nextProps.isPrevPage;
-    }
-    /**
-     * Render method
+     * Render method.
      */
 
   }, {
@@ -182,11 +173,11 @@ function (_React$Component) {
       if (this.props.isCurrentPage || this.props.isPrevPage) {
         style = Object.assign(style, styles.currentPage);
 
-        if (this.props.isAnimating && this.props.isCurrentPage) {
+        if (this.props.isCurrentPage) {
           className = (0, _classnames.default)(className, _animations.default.classes[this.props.animcursor].inClass);
         }
 
-        if (this.props.isAnimating && this.props.isPrevPage) {
+        if (this.props.isPrevPage) {
           className = (0, _classnames.default)(className, _animations.default.classes[this.props.animcursor].outClass);
         }
       }
