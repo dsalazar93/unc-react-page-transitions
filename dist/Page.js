@@ -35,6 +35,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var styles = {
   page: {
     backfaceVisibility: 'hidden',
@@ -62,8 +64,8 @@ var animEndEventNames = {
 
 var Page =
 /*#__PURE__*/
-function (_React$Component) {
-  _inherits(Page, _React$Component);
+function (_React$PureComponent) {
+  _inherits(Page, _React$PureComponent);
 
   function Page(props) {
     var _this;
@@ -71,13 +73,24 @@ function (_React$Component) {
     _classCallCheck(this, Page);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Page).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "addSetTimeout", function (callback, milliseconds) {
+      _this.setTimeouts.push(setTimeout(callback, milliseconds));
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "clearSetTimeouts", function () {
+      for (var i = _this.setTimeouts.length - 1; i >= 0; i -= 1) {
+        clearTimeout(_this.setTimeouts[i]);
+
+        _this.setTimeouts.pop();
+      }
+    });
+
     _this.page = _react.default.createRef(); // Repeaters
 
     _this.loadedPageTriggers = undefined;
     _this.leavedPageTriggers = undefined;
     _this.setTimeouts = [];
-    _this.addSetTimeout = _this.addSetTimeout.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.clearSetTimeouts = _this.clearSetTimeouts.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
   /**
@@ -90,38 +103,19 @@ function (_React$Component) {
 
 
   _createClass(Page, [{
-    key: "addSetTimeout",
-    value: function addSetTimeout(callback, milliseconds) {
-      this.setTimeouts.push(setTimeout(callback, milliseconds));
-    }
-    /**
-     * Clear all settimeout functions for the instance page
-     */
+    key: "componentDidMount",
 
-  }, {
-    key: "clearSetTimeouts",
-    value: function clearSetTimeouts() {
-      for (var i = this.setTimeouts.length - 1; i >= 0; i -= 1) {
-        clearTimeout(this.setTimeouts[i]);
-        this.setTimeouts.pop();
-      }
-    }
     /**
      * componentDidMount method
      *
      * Fired el onAnimatedEnd event and executes the loadedPageTrigger or leavedPageTriggers functions
      * according to the case.
      */
-
-  }, {
-    key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
 
       this.page.current.addEventListener(animEndEventNames[_modernizr.default.prefixed('animation')], function (event) {
         if (event.target !== _this2.page.current) return;
-
-        _this2.props.onAnimationEnd(_this2.props.isCurrentPage, _this2.props.isPrevPage);
 
         if (_this2.props.isCurrentPage) {
           if (_this2.loadedPageTriggers) {
@@ -158,6 +152,8 @@ function (_React$Component) {
             });
           }
         }
+
+        _this2.props.onAnimationEnd(_this2.props.isCurrentPage, _this2.props.isPrevPage);
       });
     }
     /**
@@ -168,7 +164,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       var style = Object.assign({}, styles.page, this.props.style || {});
-      var className = (0, _classnames.default)('ptr-page', this.props.className);
+      var className = (0, _classnames.default)(this.props.className);
 
       if (this.props.isCurrentPage || this.props.isPrevPage) {
         style = Object.assign(style, styles.currentPage);
@@ -192,7 +188,7 @@ function (_React$Component) {
   }]);
 
   return Page;
-}(_react.default.Component);
+}(_react.default.PureComponent);
 
 Page.propTypes = {
   loadedPageTriggers: _propTypes.default.array,

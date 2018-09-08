@@ -34,11 +34,6 @@ class PageTransitions extends React.PureComponent {
     this.endCurrPage = false;
     this.endPrevPage = false;
     this.support = Modernizr.cssanimations;
-
-    // Bindings
-    this.nextPage = this.nextPage.bind(this);
-    this.animcursorCheck = this.animcursorCheck.bind(this);
-    this.onAnimationEnd = this.onAnimationEnd.bind(this);
   }
 
   /**
@@ -47,7 +42,7 @@ class PageTransitions extends React.PureComponent {
    * @return {int} Cursor of the animation
    * @see ./assets/animations.js
    */
-  animcursorCheck() {
+  animcursorCheck = () => {
     if (this.animcursor > animations.max - 1) {
       this.animcursor = 0;
     } else if (this.animcursor < 0) {
@@ -67,7 +62,7 @@ class PageTransitions extends React.PureComponent {
    * @param  {boolean} endPrevPage Indicate if the previous page was the one
    *                               that ended the animation.
    */
-  onAnimationEnd(endCurrPage, endPrevPage) {
+  onAnimationEnd = (endCurrPage, endPrevPage) => {
     let animEnd = false;
 
     if (endCurrPage) {
@@ -91,7 +86,8 @@ class PageTransitions extends React.PureComponent {
       this.endPrevPage = false;
 
       this.setState({
-        isAnimating: false
+        isAnimating: false,
+        prevPage: undefined
       });
     }
   }
@@ -104,7 +100,7 @@ class PageTransitions extends React.PureComponent {
    *
    * @return {string}      Id of the next page.
    */
-  nextPage(options = {}) {
+  nextPage = (options = {}) => {
     let opts = {};
 
     opts.animation = options.animation;
@@ -145,17 +141,18 @@ class PageTransitions extends React.PureComponent {
 
   /**
    * Fires a transition to the previous page.
-   * 
+   *
    * @return {string}      Id of the previous page.
    */
-  backPage(animation) {
+  backPage = (animation) => {
     if (this.state.isAnimating) {
       return `${this.props.idPrefix}-${this.state.currentPage}`;
     }
 
     this.animcursor = animation || this.props.defaultBackPageAnimation || 0;
 
-    const nextPage = (this.state.currentPage - 1 >= 0) ? (this.state.currentPage - 1) : this.props.children.length - 1;
+    const nextPage = (this.state.currentPage - 1 >= 0)
+      ? (this.state.currentPage - 1) : this.props.children.length - 1;
 
     this.setState({
       isAnimating: true,
@@ -174,22 +171,19 @@ class PageTransitions extends React.PureComponent {
       ? this.props.children : [this.props.children];
 
     return (
-      <div className="ptr-perspective" style={styles.perspective}>
-        {children.map((child, idx) => {
-          const props = {
+      <div className="pt-perspective" style={styles.perspective}>
+        {children.map((child, idx) => (
+          React.cloneElement(child, {
             key: `${this.props.idPrefix}-${idx}`,
             id: `${this.props.idPrefix}-${idx}`,
+            className: this.props.idPrefix,
             isCurrentPage: (idx === this.state.currentPage),
-            isPrevPage: (this.state.isAnimating && idx === this.state.prevPage),
-            onAnimationEnd: this.onAnimationEnd
-          }
-          
-          if (idx === this.state.currentPage || (this.state.isAnimating && idx === this.state.prevPage)) {
-            props.animcursor = this.animcursor;
-          }
-
-          return React.cloneElement(child, props);
-        })}
+            isPrevPage: (idx === this.state.prevPage),
+            onAnimationEnd: this.onAnimationEnd,
+            animcursor: (idx === this.state.currentPage
+                || idx === this.state.prevPage) && this.animcursor
+          })
+        ))}
       </div>
     );
   }

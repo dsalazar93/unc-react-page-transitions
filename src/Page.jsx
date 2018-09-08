@@ -35,7 +35,7 @@ const animEndEventNames = {
   animation: 'animationend'
 };
 
-class Page extends React.Component {
+class Page extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -45,9 +45,6 @@ class Page extends React.Component {
     this.loadedPageTriggers = undefined;
     this.leavedPageTriggers = undefined;
     this.setTimeouts = [];
-
-    this.addSetTimeout = this.addSetTimeout.bind(this);
-    this.clearSetTimeouts = this.clearSetTimeouts.bind(this);
   }
 
   /**
@@ -57,14 +54,14 @@ class Page extends React.Component {
    * @param {Function} callback The function that will be executed
    * @param {int}   milliseconds The number of milliseconds to wait before executing the code.
    */
-  addSetTimeout(callback, milliseconds) {
+  addSetTimeout = (callback, milliseconds) => {
     this.setTimeouts.push(setTimeout(callback, milliseconds));
   }
 
   /**
    * Clear all settimeout functions for the instance page
    */
-  clearSetTimeouts() {
+  clearSetTimeouts = () => {
     for (let i = this.setTimeouts.length - 1; i >= 0; i -= 1) {
       clearTimeout(this.setTimeouts[i]);
       this.setTimeouts.pop();
@@ -80,8 +77,6 @@ class Page extends React.Component {
   componentDidMount() {
     this.page.current.addEventListener(animEndEventNames[Modernizr.prefixed('animation')], (event) => {
       if (event.target !== this.page.current) return;
-
-      this.props.onAnimationEnd(this.props.isCurrentPage, this.props.isPrevPage);
 
       if (this.props.isCurrentPage) {
         if (this.loadedPageTriggers) {
@@ -118,6 +113,8 @@ class Page extends React.Component {
           });
         }
       }
+
+      this.props.onAnimationEnd(this.props.isCurrentPage, this.props.isPrevPage);
     });
   }
 
@@ -126,7 +123,7 @@ class Page extends React.Component {
    */
   render() {
     let style = Object.assign({}, styles.page, this.props.style || {});
-    let className = classNames('ptr-page', this.props.className);
+    let className = classNames(this.props.className);
 
     if (this.props.isCurrentPage || this.props.isPrevPage) {
       style = Object.assign(style, styles.currentPage);

@@ -31,6 +31,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var styles = {
   perspective: {
     height: '100%',
@@ -54,93 +56,49 @@ function (_React$PureComponent) {
     _classCallCheck(this, PageTransitions);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PageTransitions).call(this, props));
-    _this.state = {
-      currentPage: _this.props.currentPage || 0,
-      prevPage: undefined,
-      isAnimating: false
-    }; // Without state
 
-    _this.animcursor = 0;
-    _this.endCurrPage = false;
-    _this.endPrevPage = false;
-    _this.support = _modernizr.default.cssanimations; // Bindings
-
-    _this.nextPage = _this.nextPage.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.animcursorCheck = _this.animcursorCheck.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.onAnimationEnd = _this.onAnimationEnd.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    return _this;
-  }
-  /**
-   * Return the next cursor of the animation
-   *
-   * @return {int} Cursor of the animation
-   * @see ./assets/animations.js
-   */
-
-
-  _createClass(PageTransitions, [{
-    key: "animcursorCheck",
-    value: function animcursorCheck() {
-      if (this.animcursor > animations.max - 1) {
-        this.animcursor = 0;
-      } else if (this.animcursor < 0) {
-        this.animcursor = animations.max;
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "animcursorCheck", function () {
+      if (_this.animcursor > animations.max - 1) {
+        _this.animcursor = 0;
+      } else if (_this.animcursor < 0) {
+        _this.animcursor = animations.max;
       }
 
-      this.animcursor += 1;
-      return this.animcursor;
-    }
-    /**
-     * Fired function when the page css animation is ended.
-     * This function is passed to the <Page/> component.
-     *
-     * @param  {boolean} endCurrPage Indicates if the current page was the one
-     *                               that ended the animation.
-     * @param  {boolean} endPrevPage Indicate if the previous page was the one
-     *                               that ended the animation.
-     */
+      _this.animcursor += 1;
+      return _this.animcursor;
+    });
 
-  }, {
-    key: "onAnimationEnd",
-    value: function onAnimationEnd(endCurrPage, endPrevPage) {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onAnimationEnd", function (endCurrPage, endPrevPage) {
       var animEnd = false;
 
       if (endCurrPage) {
-        this.endCurrPage = endCurrPage;
+        _this.endCurrPage = endCurrPage;
 
-        if (this.endPrevPage) {
+        if (_this.endPrevPage) {
           animEnd = true;
         }
       }
 
       if (endPrevPage) {
-        this.endPrevPage = endPrevPage;
+        _this.endPrevPage = endPrevPage;
 
-        if (this.endCurrPage) {
+        if (_this.endCurrPage) {
           animEnd = true;
         }
       }
 
       if (animEnd) {
-        this.endCurrPage = false;
-        this.endPrevPage = false;
-        this.setState({
-          isAnimating: false
+        _this.endCurrPage = false;
+        _this.endPrevPage = false;
+
+        _this.setState({
+          isAnimating: false,
+          prevPage: undefined
         });
       }
-    }
-    /**
-     * Fires the transition of pages.
-     * @param  {Object} opts This object contains 2 params:
-     *                       (animation) => cursor for animation according animations.js file.
-     *                       (page) => index of the next page to show
-     *
-     * @return {string}      Id of the next page.
-     */
+    });
 
-  }, {
-    key: "nextPage",
-    value: function nextPage() {
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "nextPage", function () {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var opts = {};
       opts.animation = options.animation;
@@ -155,75 +113,89 @@ function (_React$PureComponent) {
         opts = options;
       }
 
-      if (this.state.isAnimating || opts.page === this.state.currentPage) {
-        return "".concat(this.props.idPrefix, "-").concat(this.state.currentPage);
+      if (_this.state.isAnimating || opts.page === _this.state.currentPage) {
+        return "".concat(_this.props.idPrefix, "-").concat(_this.state.currentPage);
       }
 
       if (opts.animation) {
-        this.animcursor = opts.animation;
-      } else if (this.props.defaultNextPageAnimation) {
-        this.animcursor = this.props.defaultNextPageAnimation;
+        _this.animcursor = opts.animation;
+      } else if (_this.props.defaultNextPageAnimation) {
+        _this.animcursor = _this.props.defaultNextPageAnimation;
       } else {
-        this.animcursorCheck();
+        _this.animcursorCheck();
       }
 
-      var nextPage = opts.page || (this.state.currentPage + 1 < this.props.children.length ? this.state.currentPage + 1 : 0);
-      this.setState({
+      var nextPage = opts.page || (_this.state.currentPage + 1 < _this.props.children.length ? _this.state.currentPage + 1 : 0);
+
+      _this.setState({
         isAnimating: true,
         currentPage: nextPage,
-        prevPage: this.state.currentPage
+        prevPage: _this.state.currentPage
       });
-      return "".concat(this.props.idPrefix, "-").concat(nextPage);
-    }
-    /**
-     * Fires a transition to the previous page.
-     * 
-     * @return {string}      Id of the previous page.
-     */
 
-  }, {
-    key: "backPage",
-    value: function backPage(animation) {
-      if (this.state.isAnimating) {
-        return "".concat(this.props.idPrefix, "-").concat(this.state.currentPage);
+      return "".concat(_this.props.idPrefix, "-").concat(nextPage);
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "backPage", function (animation) {
+      if (_this.state.isAnimating) {
+        return "".concat(_this.props.idPrefix, "-").concat(_this.state.currentPage);
       }
 
-      this.animcursor = animation || this.props.defaultBackPageAnimation || 0;
-      var nextPage = this.state.currentPage - 1 >= 0 ? this.state.currentPage - 1 : this.props.children.length - 1;
-      this.setState({
+      _this.animcursor = animation || _this.props.defaultBackPageAnimation || 0;
+      var nextPage = _this.state.currentPage - 1 >= 0 ? _this.state.currentPage - 1 : _this.props.children.length - 1;
+
+      _this.setState({
         isAnimating: true,
         currentPage: nextPage,
-        prevPage: this.state.currentPage
+        prevPage: _this.state.currentPage
       });
-      return "".concat(this.props.idPrefix, "-").concat(nextPage);
-    }
+
+      return "".concat(_this.props.idPrefix, "-").concat(nextPage);
+    });
+
+    _this.state = {
+      currentPage: _this.props.currentPage || 0,
+      prevPage: undefined,
+      isAnimating: false
+    }; // Without state
+
+    _this.animcursor = 0;
+    _this.endCurrPage = false;
+    _this.endPrevPage = false;
+    _this.support = _modernizr.default.cssanimations;
+    return _this;
+  }
+  /**
+   * Return the next cursor of the animation
+   *
+   * @return {int} Cursor of the animation
+   * @see ./assets/animations.js
+   */
+
+
+  _createClass(PageTransitions, [{
+    key: "render",
+
     /**
      * Render method.
      */
-
-  }, {
-    key: "render",
     value: function render() {
       var _this2 = this;
 
       var children = Array.isArray(this.props.children) ? this.props.children : [this.props.children];
       return _react.default.createElement("div", {
-        className: "ptr-perspective",
+        className: "pt-perspective",
         style: styles.perspective
       }, children.map(function (child, idx) {
-        var props = {
+        return _react.default.cloneElement(child, {
           key: "".concat(_this2.props.idPrefix, "-").concat(idx),
           id: "".concat(_this2.props.idPrefix, "-").concat(idx),
+          className: _this2.props.idPrefix,
           isCurrentPage: idx === _this2.state.currentPage,
-          isPrevPage: _this2.state.isAnimating && idx === _this2.state.prevPage,
-          onAnimationEnd: _this2.onAnimationEnd
-        };
-
-        if (idx === _this2.state.currentPage || _this2.state.isAnimating && idx === _this2.state.prevPage) {
-          props.animcursor = _this2.animcursor;
-        }
-
-        return _react.default.cloneElement(child, props);
+          isPrevPage: idx === _this2.state.prevPage,
+          onAnimationEnd: _this2.onAnimationEnd,
+          animcursor: (idx === _this2.state.currentPage || idx === _this2.state.prevPage) && _this2.animcursor
+        });
       }));
     }
   }]);

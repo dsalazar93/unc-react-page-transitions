@@ -4,9 +4,21 @@ import React from 'react';
 
 import { render } from 'react-dom';
 
-import { PageTransitions, Page } from '../dist';
+import { PageTransitions, Page } from '../src';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.loadedPageTriggers = [
+      { f: () => { console.log('loaded'); }, r: true }
+    ];
+
+    this.leavedPageTriggers = [
+      { f: () => { console.log('leaved'); }, r: true }
+    ];
+  }
+
   render() {
     return (
       <div id="wrapper-app">
@@ -17,7 +29,25 @@ class App extends React.Component {
             <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
           </Page>
 
-          <Page style={{ backgroundColor: '#0ac2d2' }}>
+          <Page style={{ backgroundColor: '#0ac2d2' }}
+                loadedPageTriggers={this.loadedPageTriggers}
+                leavedPageTriggers={this.leavedPageTriggers}>
+            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
+          </Page>
+
+          <Page style={{ backgroundColor: '#7bb7fa' }}>
+            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
+          </Page>
+
+          <Page style={{ backgroundColor: '#7bb7fa' }}>
+            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
+          </Page>
+
+          <Page style={{ backgroundColor: '#7bb7fa' }}>
+            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
+          </Page>
+
+          <Page style={{ backgroundColor: '#7bb7fa' }}>
             <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
           </Page>
 
