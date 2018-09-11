@@ -9,6 +9,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _modernizr = _interopRequireDefault(require("modernizr"));
 
+var _classnames = _interopRequireDefault(require("classnames"));
+
 require("./assets/animations.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -190,7 +192,7 @@ function (_React$PureComponent) {
         return _react.default.cloneElement(child, {
           key: "".concat(_this2.props.idPrefix, "-").concat(idx),
           id: "".concat(_this2.props.idPrefix, "-").concat(idx),
-          className: _this2.props.idPrefix,
+          className: (0, _classnames.default)(_this2.props.idPrefix, child.props.className),
           isCurrentPage: idx === _this2.state.currentPage,
           isPrevPage: idx === _this2.state.prevPage,
           onAnimationEnd: _this2.onAnimationEnd,

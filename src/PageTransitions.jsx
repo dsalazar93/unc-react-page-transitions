@@ -4,6 +4,8 @@ import React from 'react';
 import Modernizr from 'modernizr';
 /* eslint-enable import/no-extraneous-dependencies */
 
+import classNames from 'classnames';
+
 import './assets/animations.css';
 
 const styles = {
@@ -176,7 +178,7 @@ class PageTransitions extends React.PureComponent {
           React.cloneElement(child, {
             key: `${this.props.idPrefix}-${idx}`,
             id: `${this.props.idPrefix}-${idx}`,
-            className: this.props.idPrefix,
+            className: classNames(this.props.idPrefix, child.props.className),
             isCurrentPage: (idx === this.state.currentPage),
             isPrevPage: (idx === this.state.prevPage),
             onAnimationEnd: this.onAnimationEnd,
