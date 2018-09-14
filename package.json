@@ -1,6 +1,6 @@
 {
   "name": "unc-react-page-transitions",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "React Page Transition Component based in codrops's project and developing by Unico Digital",
   "main": "dist/index.js",
   "scripts": {
