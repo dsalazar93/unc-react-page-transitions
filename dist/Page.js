@@ -120,13 +120,13 @@ function (_React$PureComponent) {
         if (_this2.props.isCurrentPage) {
           if (_this2.loadedPageTriggers) {
             _this2.loadedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this2);
+              trigger.f(_this2, _this2.page.current);
             });
           } else if (_this2.props.loadedPageTriggers) {
             _this2.loadedPageTriggers = [];
 
             _this2.props.loadedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this2);
+              trigger.f(_this2, _this2.page.current);
 
               if (trigger.r) {
                 _this2.loadedPageTriggers.push(trigger);
@@ -138,13 +138,13 @@ function (_React$PureComponent) {
         if (_this2.props.isPrevPage) {
           if (_this2.leavedPageTriggers) {
             _this2.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this2);
+              trigger.f(_this2, _this2.page.current);
             });
           } else if (_this2.props.leavedPageTriggers) {
             _this2.leavedPageTriggers = [];
 
             _this2.props.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this2);
+              trigger.f(_this2, _this2.page.current);
 
               if (trigger.r) {
                 _this2.leavedPageTriggers.push(trigger);

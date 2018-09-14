@@ -17,10 +17,6 @@ const styles = {
   }
 };
 
-const animations = {
-  max: 67
-};
-
 class PageTransitions extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -45,10 +41,10 @@ class PageTransitions extends React.PureComponent {
    * @see ./assets/animations.js
    */
   animcursorCheck = () => {
-    if (this.animcursor > animations.max - 1) {
+    if (this.animcursor >= 67) {
       this.animcursor = 0;
     } else if (this.animcursor < 0) {
-      this.animcursor = animations.max;
+      this.animcursor = 67;
     }
 
     this.animcursor += 1;
@@ -105,32 +101,32 @@ class PageTransitions extends React.PureComponent {
   nextPage = (options = {}) => {
     let opts = {};
 
-    opts.animation = options.animation;
-
-    if (typeof options === 'number') {
-      opts.page = options;
-    } else if (typeof options === 'string') {
-      opts.page = parseInt(options.split('-')[2], 10);
-    } else if (typeof options === 'object' && typeof options.page === 'string') {
-      opts.page = parseInt(options.page.split('-')[2], 10);
-    } else {
+    if (Number(options)) {
+      opts.page = Number(options);
+    } else if (typeof options === 'object' && Number(options.page)) {
       opts = options;
+      opts.page = Number(opts.page);
+    } else {
+      opts.page = undefined;
     }
 
     if (this.state.isAnimating || opts.page === this.state.currentPage) {
-      return `${this.props.idPrefix}-${this.state.currentPage}`;
+      return this.state.currentPage;
     }
 
-    if (opts.animation) {
-      this.animcursor = opts.animation;
-    } else if (this.props.defaultNextPageAnimation) {
-      this.animcursor = this.props.defaultNextPageAnimation;
-    } else {
-      this.animcursorCheck();
-    }
+    this.animcursor = opts.animation
+        || this.props.defaultNextPageAnimation
+        || this.animcursorCheck();
 
-    const nextPage = opts.page || (((this.state.currentPage + 1)
-        < this.props.children.length) ? (this.state.currentPage + 1) : 0);
+    let nextPage = opts.page;
+
+    if (opts.page === undefined) {
+      if ((this.state.currentPage + 1) < this.props.children.length) {
+        nextPage = this.state.currentPage + 1;
+      } else {
+        nextPage = 0;
+      }
+    }
 
     this.setState({
       isAnimating: true,
@@ -138,7 +134,7 @@ class PageTransitions extends React.PureComponent {
       prevPage: this.state.currentPage
     });
 
-    return `${this.props.idPrefix}-${nextPage}`;
+    return nextPage;
   }
 
   /**
@@ -148,10 +144,12 @@ class PageTransitions extends React.PureComponent {
    */
   backPage = (animation) => {
     if (this.state.isAnimating) {
-      return `${this.props.idPrefix}-${this.state.currentPage}`;
+      return this.state.currentPage;
     }
 
-    this.animcursor = animation || this.props.defaultBackPageAnimation || 0;
+    this.animcursor = animation
+        || this.props.defaultBackPageAnimation
+        || this.animcursorCheck();
 
     const nextPage = (this.state.currentPage - 1 >= 0)
       ? (this.state.currentPage - 1) : this.props.children.length - 1;
@@ -162,7 +160,7 @@ class PageTransitions extends React.PureComponent {
       prevPage: this.state.currentPage
     });
 
-    return `${this.props.idPrefix}-${nextPage}`;
+    return nextPage;
   }
 
   /**
@@ -178,6 +176,7 @@ class PageTransitions extends React.PureComponent {
           React.cloneElement(child, {
             key: `${this.props.idPrefix}-${idx}`,
             id: `${this.props.idPrefix}-${idx}`,
+            idx,
             className: classNames(this.props.idPrefix, child.props.className),
             isCurrentPage: (idx === this.state.currentPage),
             isPrevPage: (idx === this.state.prevPage),

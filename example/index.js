@@ -6,19 +6,19 @@ import { render } from 'react-dom';
 
 import { PageTransitions, Page } from '../src';
 
+const loadedPageTriggers = [
+  /* eslint-disable no-console */
+  { f: () => { console.log('loaded'); }, r: true }
+  /* eslint-enable no-console */
+];
+
+const leavedPageTriggers = [
+  /* eslint-disable no-console */
+  { f: () => { console.log('leaved'); }, r: true }
+  /* eslint-enable no-console */
+];
+
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.loadedPageTriggers = [
-      { f: () => { console.log('loaded'); }, r: true }
-    ];
-
-    this.leavedPageTriggers = [
-      { f: () => { console.log('leaved'); }, r: true }
-    ];
-  }
-
   render() {
     return (
       <div id="wrapper-app">
@@ -30,24 +30,8 @@ class App extends React.Component {
           </Page>
 
           <Page style={{ backgroundColor: '#0ac2d2' }}
-                loadedPageTriggers={this.loadedPageTriggers}
-                leavedPageTriggers={this.leavedPageTriggers}>
-            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
-          </Page>
-
-          <Page style={{ backgroundColor: '#7bb7fa' }}>
-            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
-          </Page>
-
-          <Page style={{ backgroundColor: '#7bb7fa' }}>
-            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
-          </Page>
-
-          <Page style={{ backgroundColor: '#7bb7fa' }}>
-            <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
-          </Page>
-
-          <Page style={{ backgroundColor: '#7bb7fa' }}>
+                loadedPageTriggers={loadedPageTriggers}
+                leavedPageTriggers={leavedPageTriggers}>
             <h1><small>A Collection of</small><strong>PAGE</strong> TRANSITIONS</h1>
           </Page>
 

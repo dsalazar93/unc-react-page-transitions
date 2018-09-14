@@ -81,13 +81,13 @@ class Page extends React.PureComponent {
       if (this.props.isCurrentPage) {
         if (this.loadedPageTriggers) {
           this.loadedPageTriggers.forEach((trigger) => {
-            trigger.f(this);
+            trigger.f(this, this.page.current);
           });
         } else if (this.props.loadedPageTriggers) {
           this.loadedPageTriggers = [];
 
           this.props.loadedPageTriggers.forEach((trigger) => {
-            trigger.f(this);
+            trigger.f(this, this.page.current);
 
             if (trigger.r) {
               this.loadedPageTriggers.push(trigger);
@@ -99,13 +99,13 @@ class Page extends React.PureComponent {
       if (this.props.isPrevPage) {
         if (this.leavedPageTriggers) {
           this.leavedPageTriggers.forEach((trigger) => {
-            trigger.f(this);
+            trigger.f(this, this.page.current);
           });
         } else if (this.props.leavedPageTriggers) {
           this.leavedPageTriggers = [];
 
           this.props.leavedPageTriggers.forEach((trigger) => {
-            trigger.f(this);
+            trigger.f(this, this.page.current);
 
             if (trigger.r) {
               this.leavedPageTriggers.push(trigger);

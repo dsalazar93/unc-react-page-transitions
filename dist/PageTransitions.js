@@ -43,9 +43,6 @@ var styles = {
     width: '100%'
   }
 };
-var animations = {
-  max: 67
-};
 
 var PageTransitions =
 /*#__PURE__*/
@@ -60,10 +57,10 @@ function (_React$PureComponent) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(PageTransitions).call(this, props));
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "animcursorCheck", function () {
-      if (_this.animcursor > animations.max - 1) {
+      if (_this.animcursor >= 67) {
         _this.animcursor = 0;
       } else if (_this.animcursor < 0) {
-        _this.animcursor = animations.max;
+        _this.animcursor = 67;
       }
 
       _this.animcursor += 1;
@@ -103,31 +100,30 @@ function (_React$PureComponent) {
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "nextPage", function () {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var opts = {};
-      opts.animation = options.animation;
 
-      if (typeof options === 'number') {
-        opts.page = options;
-      } else if (typeof options === 'string') {
-        opts.page = parseInt(options.split('-')[2], 10);
-      } else if (_typeof(options) === 'object' && typeof options.page === 'string') {
-        opts.page = parseInt(options.page.split('-')[2], 10);
-      } else {
+      if (Number(options)) {
+        opts.page = Number(options);
+      } else if (_typeof(options) === 'object' && Number(options.page)) {
         opts = options;
+        opts.page = Number(opts.page);
+      } else {
+        opts.page = undefined;
       }
 
       if (_this.state.isAnimating || opts.page === _this.state.currentPage) {
-        return "".concat(_this.props.idPrefix, "-").concat(_this.state.currentPage);
+        return _this.state.currentPage;
       }
 
-      if (opts.animation) {
-        _this.animcursor = opts.animation;
-      } else if (_this.props.defaultNextPageAnimation) {
-        _this.animcursor = _this.props.defaultNextPageAnimation;
-      } else {
-        _this.animcursorCheck();
-      }
+      _this.animcursor = opts.animation || _this.props.defaultNextPageAnimation || _this.animcursorCheck();
+      var nextPage = opts.page;
 
-      var nextPage = opts.page || (_this.state.currentPage + 1 < _this.props.children.length ? _this.state.currentPage + 1 : 0);
+      if (opts.page === undefined) {
+        if (_this.state.currentPage + 1 < _this.props.children.length) {
+          nextPage = _this.state.currentPage + 1;
+        } else {
+          nextPage = 0;
+        }
+      }
 
       _this.setState({
         isAnimating: true,
@@ -135,15 +131,15 @@ function (_React$PureComponent) {
         prevPage: _this.state.currentPage
       });
 
-      return "".concat(_this.props.idPrefix, "-").concat(nextPage);
+      return nextPage;
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "backPage", function (animation) {
       if (_this.state.isAnimating) {
-        return "".concat(_this.props.idPrefix, "-").concat(_this.state.currentPage);
+        return _this.state.currentPage;
       }
 
-      _this.animcursor = animation || _this.props.defaultBackPageAnimation || 0;
+      _this.animcursor = animation || _this.props.defaultBackPageAnimation || _this.animcursorCheck();
       var nextPage = _this.state.currentPage - 1 >= 0 ? _this.state.currentPage - 1 : _this.props.children.length - 1;
 
       _this.setState({
@@ -152,7 +148,7 @@ function (_React$PureComponent) {
         prevPage: _this.state.currentPage
       });
 
-      return "".concat(_this.props.idPrefix, "-").concat(nextPage);
+      return nextPage;
     });
 
     _this.state = {
@@ -192,6 +188,7 @@ function (_React$PureComponent) {
         return _react.default.cloneElement(child, {
           key: "".concat(_this2.props.idPrefix, "-").concat(idx),
           id: "".concat(_this2.props.idPrefix, "-").concat(idx),
+          idx: idx,
           className: (0, _classnames.default)(_this2.props.idPrefix, child.props.className),
           isCurrentPage: idx === _this2.state.currentPage,
           isPrevPage: idx === _this2.state.prevPage,
