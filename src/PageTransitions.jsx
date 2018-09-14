@@ -103,7 +103,7 @@ class PageTransitions extends React.PureComponent {
 
     if (Number(options) || Number(options) === 0) {
       opts.page = Number(options);
-    } else if (typeof options === 'object' && Number(options.page)) {
+    } else if (typeof options === 'object' && (Number(options.page) || Number(options.page) === 0)) {
       opts = options;
       opts.page = Number(opts.page);
     } else {
