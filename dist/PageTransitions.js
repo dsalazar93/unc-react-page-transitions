@@ -101,7 +101,7 @@ function (_React$PureComponent) {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
       var opts = {};
 
-      if (Number(options)) {
+      if (Number(options) || Number(options) === 0) {
         opts.page = Number(options);
       } else if (_typeof(options) === 'object' && Number(options.page)) {
         opts = options;

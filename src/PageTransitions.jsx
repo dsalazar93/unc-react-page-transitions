@@ -101,7 +101,7 @@ class PageTransitions extends React.PureComponent {
   nextPage = (options = {}) => {
     let opts = {};
 
-    if (Number(options)) {
+    if (Number(options) || Number(options) === 0) {
       opts.page = Number(options);
     } else if (typeof options === 'object' && Number(options.page)) {
       opts = options;
