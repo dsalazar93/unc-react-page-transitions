@@ -172,11 +172,24 @@ function (_React$PureComponent) {
 
 
   _createClass(PageTransitions, [{
-    key: "render",
+    key: "componentDidUpdate",
 
+    /**
+     * Lifecycle method.
+     *
+     * Updating state from new props.
+     */
+    value: function componentDidUpdate(props) {
+      if (props.currentPage !== this.props.currentPage) {
+        this.nextPage(this.props.currentPage);
+      }
+    }
     /**
      * Render method.
      */
+
+  }, {
+    key: "render",
     value: function render() {
       var _this2 = this;
 

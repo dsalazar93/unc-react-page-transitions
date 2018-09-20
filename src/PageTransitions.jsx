@@ -164,6 +164,17 @@ class PageTransitions extends React.PureComponent {
   }
 
   /**
+   * Lifecycle method.
+   *
+   * Updating state from new props.
+   */
+  componentDidUpdate(props) {
+    if (props.currentPage !== this.props.currentPage) {
+      this.nextPage(this.props.currentPage);
+    }
+  }
+
+  /**
    * Render method.
    */
   render() {
