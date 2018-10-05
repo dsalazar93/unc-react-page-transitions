@@ -154,12 +154,12 @@ function (_React$PureComponent) {
     _this.state = {
       currentPage: _this.props.currentPage || 0,
       prevPage: undefined,
-      isAnimating: false
+      isAnimating: true
     }; // Without state
 
     _this.animcursor = 0;
     _this.endCurrPage = false;
-    _this.endPrevPage = false;
+    _this.endPrevPage = true;
     _this.support = _modernizr.default.cssanimations;
     return _this;
   }
@@ -198,14 +198,14 @@ function (_React$PureComponent) {
         className: "pt-perspective",
         style: styles.perspective
       }, children.map(function (child, idx) {
-        return _react.default.cloneElement(child, {
+        return child && (idx === _this2.state.currentPage || idx === _this2.state.prevPage) && _react.default.cloneElement(child, {
           key: "".concat(_this2.props.idPrefix, "-").concat(idx),
           id: "".concat(_this2.props.idPrefix, "-").concat(idx),
-          idx: idx,
           className: (0, _classnames.default)(_this2.props.idPrefix, child.props.className),
           isCurrentPage: idx === _this2.state.currentPage,
           isPrevPage: idx === _this2.state.prevPage,
           onAnimationEnd: _this2.onAnimationEnd,
+          nextPage: _this2.nextPage,
           animcursor: (idx === _this2.state.currentPage || idx === _this2.state.prevPage) && _this2.animcursor
         });
       }));

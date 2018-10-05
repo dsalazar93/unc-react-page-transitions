@@ -71,8 +71,7 @@ class Page extends React.PureComponent {
   /**
    * componentDidMount method
    *
-   * Fired el onAnimatedEnd event and executes the loadedPageTrigger or leavedPageTriggers functions
-   * according to the case.
+   * Executes the loadedPageTriggers functions when the component is mounted.
    */
   componentDidMount() {
     this.page.current.addEventListener(animEndEventNames[Modernizr.prefixed('animation')], (event) => {
@@ -96,26 +95,34 @@ class Page extends React.PureComponent {
         }
       }
 
-      if (this.props.isPrevPage) {
-        if (this.leavedPageTriggers) {
-          this.leavedPageTriggers.forEach((trigger) => {
-            trigger.f(this, this.page.current);
-          });
-        } else if (this.props.leavedPageTriggers) {
-          this.leavedPageTriggers = [];
-
-          this.props.leavedPageTriggers.forEach((trigger) => {
-            trigger.f(this, this.page.current);
-
-            if (trigger.r) {
-              this.leavedPageTriggers.push(trigger);
-            }
-          });
-        }
-      }
-
       this.props.onAnimationEnd(this.props.isCurrentPage, this.props.isPrevPage);
     });
+  }
+
+  /**
+   * componentWillUnmount method
+   *
+   * Executes the leavedPageTriggers functions when the component is unmounted
+   * and clear the registred setTimeouts.
+   */
+  componentWillUnmount() {
+    if (this.leavedPageTriggers) {
+      this.leavedPageTriggers.forEach((trigger) => {
+        trigger.f(this, this.page.current);
+      });
+    } else if (this.props.leavedPageTriggers) {
+      this.leavedPageTriggers = [];
+
+      this.props.leavedPageTriggers.forEach((trigger) => {
+        trigger.f(this, this.page.current);
+
+        if (trigger.r) {
+          this.leavedPageTriggers.push(trigger);
+        }
+      });
+    }
+
+    this.clearSetTimeouts();
   }
 
   /**

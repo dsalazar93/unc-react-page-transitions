@@ -108,8 +108,7 @@ function (_React$PureComponent) {
     /**
      * componentDidMount method
      *
-     * Fired el onAnimatedEnd event and executes the loadedPageTrigger or leavedPageTriggers functions
-     * according to the case.
+     * Executes the loadedPageTriggers functions when the component is mounted.
      */
     value: function componentDidMount() {
       var _this2 = this;
@@ -135,26 +134,37 @@ function (_React$PureComponent) {
           }
         }
 
-        if (_this2.props.isPrevPage) {
-          if (_this2.leavedPageTriggers) {
-            _this2.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this2, _this2.page.current);
-            });
-          } else if (_this2.props.leavedPageTriggers) {
-            _this2.leavedPageTriggers = [];
-
-            _this2.props.leavedPageTriggers.forEach(function (trigger) {
-              trigger.f(_this2, _this2.page.current);
-
-              if (trigger.r) {
-                _this2.leavedPageTriggers.push(trigger);
-              }
-            });
-          }
-        }
-
         _this2.props.onAnimationEnd(_this2.props.isCurrentPage, _this2.props.isPrevPage);
       });
+    }
+    /**
+     * componentWillUnmount method
+     *
+     * Executes the leavedPageTriggers functions when the component is unmounted
+     * and clear the registred setTimeouts.
+     */
+
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      var _this3 = this;
+
+      if (this.leavedPageTriggers) {
+        this.leavedPageTriggers.forEach(function (trigger) {
+          trigger.f(_this3, _this3.page.current);
+        });
+      } else if (this.props.leavedPageTriggers) {
+        this.leavedPageTriggers = [];
+        this.props.leavedPageTriggers.forEach(function (trigger) {
+          trigger.f(_this3, _this3.page.current);
+
+          if (trigger.r) {
+            _this3.leavedPageTriggers.push(trigger);
+          }
+        });
+      }
+
+      this.clearSetTimeouts();
     }
     /**
      * Render method.

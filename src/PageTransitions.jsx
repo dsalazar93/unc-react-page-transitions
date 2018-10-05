@@ -24,13 +24,13 @@ class PageTransitions extends React.PureComponent {
     this.state = {
       currentPage: this.props.currentPage || 0,
       prevPage: undefined,
-      isAnimating: false
+      isAnimating: true
     };
 
     // Without state
     this.animcursor = 0;
     this.endCurrPage = false;
-    this.endPrevPage = false;
+    this.endPrevPage = true;
     this.support = Modernizr.cssanimations;
   }
 
@@ -184,14 +184,16 @@ class PageTransitions extends React.PureComponent {
     return (
       <div className="pt-perspective" style={styles.perspective}>
         {children.map((child, idx) => (
-          React.cloneElement(child, {
+          child
+          && (idx === this.state.currentPage || idx === this.state.prevPage)
+          && React.cloneElement(child, {
             key: `${this.props.idPrefix}-${idx}`,
             id: `${this.props.idPrefix}-${idx}`,
-            idx,
             className: classNames(this.props.idPrefix, child.props.className),
             isCurrentPage: (idx === this.state.currentPage),
             isPrevPage: (idx === this.state.prevPage),
             onAnimationEnd: this.onAnimationEnd,
+            nextPage: this.nextPage,
             animcursor: (idx === this.state.currentPage
                 || idx === this.state.prevPage) && this.animcursor
           })
